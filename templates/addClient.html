@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Client Operations
+{% endblock %}
+
+{% block main %}
+
+<main>
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                    <img class="header-logo" src="/static/logo.png" width="150">
+                </a>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-5">
+                    <li><a href="/" class="nav-link px-2 link-secondary">Tasks</a></li>
+                    <li><a href="/clients" class="nav-link px-2 link-secondary fw-bold pcolor">Clients</a></li>
+                    <li><a href="/settings" class="nav-link px-2 link-secondary">Settings</a></li>
+                </ul>
+                <div class="text-end">
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <h3>Add new client</h3>
+        <hr>
+        <form method="POST" class="row g-3">
+            <input name="clientid" type="hidden" value="{{ client.clientid }}">
+
+            <div class="col-4">
+                <label for="name" class="form-label">Name</label>
+                <input name="name" type="text" class="form-control" id="name" value="{{ client.name }}" required>
+            </div>
+            <div class="col-4">
+                <label for="email" class="form-label">Email</label>
+                <input name="email" type="email" class="form-control" id="email" value="{{ client.email or '' }}">
+            </div>
+            <div class="col-4">
+                <label for="contact" class="form-label">Contact</label>
+                <input name="contact" type="contact" class="form-control" id="contact" value="{{ client.contact or '' }}">
+            </div>
+            <div class="col-4">
+                <label for="phone" class="form-label">Phone</label>
+                <input name="phone" type="phone" class="form-control" id="phone" value="{{ client.phone or '' }}">
+            </div>
+            <div class="col-4">
+                <label for="address" class="form-label">Address</label>
+                <input name="address" type="address" class="form-control" id="address" value="{{ client.address or '' }}">
+            </div>
+            <div class="col-12 mt-5">
+                <div class="d-grid gap-2">
+                    {% if client.clientid %}
+                    <button name="submit" class="btn btn-outline-secondary" type="submit" value="update">Update</button>
+                    {% else %}
+                    <button name="submit" class="btn btn-secondary" type="submit" value="add">Add</button>
+                    {% endif %}
+                  </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+{% endblock %}

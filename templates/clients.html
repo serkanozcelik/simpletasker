@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Clients
+{% endblock %}
+
+{% block main %}
+
+<main>
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                    <img class="header-logo" src="/static/logo.png" width="150">
+                </a>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-5">
+                    <li><a href="/" class="nav-link px-2 link-secondary">Tasks</a></li>
+                    <li><a href="/clients" class="nav-link px-2 link-secondary fw-bold pcolor">Clients</a></li>
+                    <li><a href="/settings" class="nav-link px-2 link-secondary">Settings</a></li>
+                </ul>
+                <div class="text-end">
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <h3 class="mb-0 flex-grow-1">Clients <span class="text-muted fs-5">({{ count or 0 }})</span></h3>
+            <a href="/addClient" class="btn btn-outline-secondary ms-2"><i class="bi-plus"></i> New</a>
+        </div>
+        <hr>
+        <table class="table">
+            <caption>List of Clients</caption>
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Address</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for client in clients %}
+                <tr>
+                    <th scope="row">{{ client.row }}</th>
+                    <td>{{ client.clientid }}</td>
+                    <td>{{ client.name }}</td>
+                    <td>{{ client.email or '' }}</td>
+                    <td>{{ client.contact or ''  }}</td>
+                    <td>{{ client.phone or ''  }}</td>
+                    <td>{{ client.address or ''  }}</td>
+                    <td><a href="/addClient?clientid={{ client.clientid }}">Edit</a> <a href="#" onclick="remove({{ client.clientid }})">Remove</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<script>
+    function remove(clientid) {
+        bootbox.confirm('This is the default confirm!', function(result) {
+            document.location.href = '/?submit=remove&clientid=' + clientid;
+        });
+    }
+</script>
+
+{% endblock %}

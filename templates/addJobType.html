@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Job Type Operations
+{% endblock %}
+
+{% block main %}
+
+<main>
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                    <img class="header-logo" src="/static/logo.png" width="150">
+                </a>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-5">
+                    <li><a href="/" class="nav-link px-2 link-secondary">Tasks</a></li>
+                    <li><a href="/clients" class="nav-link px-2 link-secondary">Clients</a></li>
+                    <li><a href="/settings" class="nav-link px-2 link-secondary fw-bold pcolor">Settings</a></li>
+                </ul>
+                <div class="text-end">
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <h3>Add new Job Type</h3>
+        <hr>
+        <form method="POST" class="row g-3">
+            <input name="typeid" type="hidden" value="{{ jobType.typeid }}">
+            <div class="col-4">
+                <label for="name" class="form-label">Job Name</label>
+                <input name="name" type="text" class="form-control" id="name" value="{{ jobType.name }}" placeholder="Development, bugfix, design, etc." required>
+            </div>
+            <div class="col-4">
+                <label for="price" class="form-label">Hourly Price</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <input name="price" type="number" min="0" step="1" class="form-control" id="price" aria-label="Amount (to the nearest dollar)" value="{{ jobType.price or 0 }}" required>
+                    <span class="input-group-text">.00</span>
+                </div>
+            </div>
+            <div class="col-12 mt-5">
+                <div class="d-grid gap-2">
+                    {% if jobType.typeid %}
+                    <button name="submit" class="btn btn-outline-secondary" type="submit" value="update">Update</button>
+                    {% else %}
+                    <button name="submit" class="btn btn-secondary" type="submit" value="add">Add</button>
+                    {% endif %}
+                  </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+{% endblock %}

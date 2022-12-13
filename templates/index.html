@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Tasks
+{% endblock %}
+
+{% block main %}
+
+<main>
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                    <img class="header-logo" src="/static/logo.png" width="150">
+                </a>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-5">
+                    <li><a href="/" class="nav-link px-2 link-secondary fw-bold pcolor">Tasks</a></li>
+                    <li><a href="/clients" class="nav-link px-2 link-secondary">Clients</a></li>
+                    <li><a href="/settings" class="nav-link px-2 link-secondary">Settings</a></li>
+                </ul>
+                <div class="text-end">
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <h3 class="mb-0 flex-grow-1">Tasks <span class="text-muted fs-5">({{ count or 0 }})</span></h3>
+            <form method="GET" onsubmit="return checkForm()" action="/addTask" class="d-flex">
+                <select name="clientid" class="form-select w-auto ms-2" aria-label="Clients">
+                    <option value="">All Clients</option>
+                    {% for client in clients %}
+                    <option value="{{ client.clientid }}" {% if client.clientid == clientid|int %} selected="selected" {% endif %}>{{ client.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-outline-secondary ms-2"><i class="bi-plus"></i> New</button>
+            </form>
+          </div>
+        <hr>
+        <table class="table">
+            <caption>List of Tasks</caption>
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Indate</th>
+                    <th scope="col">Start</th>
+                    <th scope="col">Finish</th>
+                    <th scope="col" class="text-nowrap">Module / Page</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Brief</th>
+                    <th scope="col" class="text-center">Duration</th>
+                    <th scope="col" class="text-center text-nowrap">income</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for task in tasks %}
+                <tr>
+                    <th scope="row">{{ task.row }}</th>
+                    <td class="text-nowrap">{{ task.client }}</td>
+                    <td>{{ task.inDate }}</td>
+                    <td>{{ task.startDate }}</td>
+                    <td>{{ task.finishDate }}</td>
+                    <td>{{ task.section }}<br>{{ task.page }}</td>
+                    <td>{{ task.jobType }}</td>
+                    <td>{{ task.brief }}</td>
+                    <td class="text-end">{{ task.durationPretty or 'InProgress' }}</td>
+                    <td class="text-end">${{ task.income }}</td>
+                    <td><a href="/addTask?clientid={{ task.clientid }}&taskid={{ task.taskid }}">Edit</a> <a href="#" onclick="remove({{ task.taskid }})">Remove</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <foot class="table-group-divider">
+                <td colspan="9" class="text-end fw-bold">Total</td>
+                <td class="text-end fw-bold">${{ income }}</td>
+                <td></td>
+            </foot>
+        </table>
+    </div>
+</main>
+
+<script>
+    function remove(taskid) {
+        bootbox.confirm('This is the default confirm!', function(result) {
+            document.location.href = '/?submit=remove&taskid=' + taskid;
+        });
+    }
+
+    function checkForm() {
+        if(!$('select[name="clientid"]').val()) {
+            bootbox.alert('Select or add a new client!');
+            return false;
+        }
+
+        return true;
+    }
+
+    $(document).ready(function() {
+
+        $('select[name="clientid"]').on('change', function() {
+            document.location.href = '/?clientid=' + $(this).val();
+        });
+
+    });
+
+</script>
+
+{% endblock %}

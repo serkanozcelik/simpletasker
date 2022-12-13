@@ -1,0 +1,37 @@
+html,
+body {
+  height: 100%;
+  color: #333;
+}
+
+.pcolor {
+  color: #5c4fcf !important;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[name="username"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[name="password"] {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+.wells {
+  border-radius: 6px;
+  border: 1px solid #eee;
+  padding: 15px;
+}
+

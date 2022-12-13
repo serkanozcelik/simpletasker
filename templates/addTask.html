@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Task Operations
+{% endblock %}
+
+{% block main %}
+
+<main>
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                    <img class="header-logo" src="/static/logo.png" width="150">
+                </a>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-5">
+                    <li><a href="/" class="nav-link px-2 link-secondary fw-bold pcolor">Tasks</a></li>
+                    <li><a href="/clients" class="nav-link px-2 link-secondary">Clients</a></li>
+                    <li><a href="/settings" class="nav-link px-2 link-secondary">Settings</a></li>
+                </ul>
+                <div class="text-end">
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <h3>Add new task to {{ client.name }}</h3>
+        <hr>
+        <form method="POST" class="row g-3">
+            <input name="clientid" type="hidden" value="{{ client.clientid }}">
+            <input name="taskid" type="hidden" value="{{ task.taskid }}">
+            <div class="col-4">
+                <label for="inDate" class="form-label">Incoming Date</label>
+                <input name="inDate" type="date" class="form-control" id="inDate" value="{{ dates.inDate }}">
+            </div>
+            <div class="col-4">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input name="startDate" type="date" class="form-control" id="startDate" value="{{ dates.startDate }}">
+            </div>
+            <div class="col-4">
+                <label for="finishDate" class="form-label">Finish Date</label>
+                <input name="finishDate" type="date" class="form-control" id="finishDate" value="{{ dates.finishDate }}">
+            </div>
+            <div class="col-4">
+                <label for="section" class="form-label">Section</label>
+                <input name="section" type="text" class="form-control" id="section" placeholder="Users, products, etc." value="{{ task.section }}" required>
+            </div>
+            <div class="col-4">
+                <label for="page" class="form-label">Page / Module</label>
+                <input name="page" type="text" class="form-control" id="page" placeholder="..." value="{{ task.page }}" required>
+            </div>
+            <div class="col-4">
+                <div class="row gx-3">
+                    <div class="col-6">
+                        <label for="jobtype" class="form-label">Job Type</label>
+                        <select name="typeid" class="form-select w-auto" aria-label="jobtype" required>
+                            {% for jobType in jobTypes %}
+                            <option data-price="{{ jobType.price }}" value="{{ jobType.typeid }}" {% if jobType.typeid == task.jobTypeId %} selected="selected" {% endif %}>{{ jobType.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label for="price" class="form-label text-nowrap">Hourly($)</label>
+                        <input name="price" type="number" class="form-control" id="price" min="0" value="{{ task.defaultPrice or task.price }}" required>
+                    </div>
+
+                    <div class="col-3">
+                        <label for="duration" class="form-label">Duration</label>
+                        <input name="duration" type="number" class="form-control" id="duration" min="0" value="{{ task.duration or 0 }}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <label for="brief" class="form-label">Brief</label>
+                <textarea name="brief" class="form-control" id="brief" placeholder="..." required>{{ task.brief }}</textarea>
+            </div>
+            <div class="col-12 mt-5">
+                <div class="d-grid gap-2">
+                    {% if task.taskid %}
+                    <button name="submit" class="btn btn-outline-secondary" type="submit" value="update">Update</button>
+                    {% else %}
+                    <button name="submit" class="btn btn-secondary" type="submit" value="add">Add</button>
+                    {% endif %}
+                  </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+
+    var sections = JSON.parse({{ inputData.sections | tojson }});
+    var pages = JSON.parse({{ inputData.pages | tojson }});
+
+    $(document).ready(function() {
+
+        $('#section').autocomplete({
+            source: sections
+        });
+
+        $('#page').autocomplete({
+            source: pages
+        });
+
+        $('select[name="typeid"]').on('change', function () {
+            $('input[name="price"]').val($(this).find('option:selected').data('price'));
+        });
+
+        if(!$('input[name="price"]').val()) {
+            $('select[name="typeid"]').change();
+        }
+
+    });
+
+</script>
+{% endblock %}
